@@ -3,6 +3,7 @@ extends CharacterBody2D
 var move_speed := 300
 var bullet_scene := preload("res://bullet.tscn")
 
+
 func _physics_process(_delta: float) -> void:
 	look_at(get_global_mouse_position())
 	
