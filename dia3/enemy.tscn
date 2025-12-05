@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://d1q56dyo1bwct"]
+
+[ext_resource type="Script" uid="uid://bu0tyq6qhb425" path="res://enemy.gd" id="1_4gyqm"]
+[ext_resource type="Texture2D" uid="uid://daw7bbo4705di" path="res://assets/pentagon.png" id="1_7k104"]
+
+[node name="Enemy" type="RigidBody2D"]
+collision_layer = 4
+collision_mask = 3
+contact_monitor = true
+max_contacts_reported = 10
+script = ExtResource("1_4gyqm")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 0, 0, 1)
+light_mask = 0
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("1_7k104")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(0, -18, 19, -5, 12, 18, -12, 18, -19, -4)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
