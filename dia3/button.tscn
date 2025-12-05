@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://d0bprlgck1fxm"]
+
+[ext_resource type="Script" uid="uid://dylallr4ykaqi" path="res://button.gd" id="1_r04n3"]
+
+[node name="Button" type="Button"]
+offset_left = 115.0
+offset_top = 91.0
+offset_right = 591.0
+offset_bottom = 285.0
+text = "Hello, World!"
+script = ExtResource("1_r04n3")
+
+[connection signal="pressed" from="." to="." method="botao_apertado"]
