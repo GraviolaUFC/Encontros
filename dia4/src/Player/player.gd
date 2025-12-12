@@ -8,7 +8,7 @@ var can_shoot := true
 func _ready() -> void:
 	Global.player = self
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	look_at(get_global_mouse_position())
 	
 	var dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -27,8 +27,16 @@ func _physics_process(_delta: float) -> void:
 			can_shoot = false
 			%ShootTimer.start()
 	
-	move_and_slide()
+	var collision := move_and_collide(velocity * delta)
+	if collision != null:
+		print("aa")
+		var body := collision.get_collider()
+		if body is Enemy:
+			_damage()
 
+
+func _damage() -> void:
+	queue_free()
 
 func _on_shoot_timer_timeout() -> void:
 	can_shoot = true

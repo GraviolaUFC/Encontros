@@ -1,6 +1,7 @@
+class_name Enemy
 extends RigidBody2D
 
-
+signal died
 const SPEED = 200.0
 
 
@@ -16,5 +17,4 @@ func _on_body_entered(body: Node) -> void:
 	if body is Bullet:
 		queue_free()
 		body.queue_free()
-	elif body is Player:
-		body.queue_free()
+		died.emit()
