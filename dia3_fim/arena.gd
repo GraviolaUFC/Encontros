@@ -8,7 +8,6 @@ func _process(delta: float) -> void:
 	time_alive += delta
 	%Label.text = "%.2f" % [time_alive]
 
-
 func _on_spawn_timer_timeout() -> void:
 	%PathFollow2D.progress_ratio = randf()
 	var enemy := enemy_scene.instantiate()
