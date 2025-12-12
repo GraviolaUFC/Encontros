@@ -1,0 +1,45 @@
+[gd_scene load_steps=4 format=3 uid="uid://bmvmtpxq0y77f"]
+
+[ext_resource type="Script" uid="uid://b7vduafjxexpa" path="res://src/main.gd" id="1_gh0ne"]
+[ext_resource type="PackedScene" uid="uid://3yatj6ifxvxm" path="res://src/Player/player.tscn" id="2_5q4o7"]
+
+[sub_resource type="Curve2D" id="Curve2D_ubfh8"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -128, -128, 0, 0, 0, 0, 1280, -128, 0, 0, 0, 0, 1280, 768, 0, 0, 0, 0, -128, 768, 0, 0, 0, 0, -128, -128)
+}
+point_count = 5
+
+[node name="Arena" type="Node2D"]
+script = ExtResource("1_gh0ne")
+
+[node name="Player" parent="." instance=ExtResource("2_5q4o7")]
+position = Vector2(629, 199)
+
+[node name="SpawnLine" type="Path2D" parent="."]
+curve = SubResource("Curve2D_ubfh8")
+
+[node name="SpawnSampler" type="PathFollow2D" parent="SpawnLine"]
+unique_name_in_owner = true
+position = Vector2(-128, -128)
+
+[node name="SpawnTimer" type="Timer" parent="."]
+wait_time = 0.25
+autostart = true
+
+[node name="PosLabel" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 691.0
+offset_top = 12.0
+offset_right = 1140.0
+offset_bottom = 83.0
+theme_override_font_sizes/font_size = 48
+
+[node name="Label" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 17.0
+offset_top = 15.0
+offset_right = 281.0
+offset_bottom = 139.0
+theme_override_font_sizes/font_size = 48
+
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
