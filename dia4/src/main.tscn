@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bmvmtpxq0y77f"]
+[gd_scene load_steps=4 format=3 uid="uid://bmvmtpxq0y77f"]
 
 [ext_resource type="Script" uid="uid://b7vduafjxexpa" path="res://src/main.gd" id="1_gh0ne"]
 [ext_resource type="PackedScene" uid="uid://3yatj6ifxvxm" path="res://src/Player/player.tscn" id="2_5q4o7"]
@@ -8,12 +8,6 @@ _data = {
 "points": PackedVector2Array(0, 0, 0, 0, -128, -128, 0, 0, 0, 0, 1280, -128, 0, 0, 0, 0, 1280, 768, 0, 0, 0, 0, -128, 768, 0, 0, 0, 0, -128, -128)
 }
 point_count = 5
-
-[sub_resource type="Environment" id="Environment_gh0ne"]
-background_mode = 3
-glow_enabled = true
-glow_bloom = 0.19
-glow_blend_mode = 0
 
 [node name="Arena" type="Node2D"]
 script = ExtResource("1_gh0ne")
@@ -32,16 +26,5 @@ position = Vector2(576, 324)
 [node name="SpawnTimer" type="Timer" parent="."]
 wait_time = 0.25
 autostart = true
-
-[node name="PosLabel" type="Label" parent="."]
-unique_name_in_owner = true
-offset_left = 691.0
-offset_top = 12.0
-offset_right = 1140.0
-offset_bottom = 83.0
-theme_override_font_sizes/font_size = 48
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_gh0ne")
 
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
