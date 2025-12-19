@@ -4,6 +4,7 @@ extends CharacterBody2D
 const MAX_HP := 50.0
 var current_hp := MAX_HP
 
+var dead := false
 var move_speed := 300
 var dash_speed := move_speed * 3
 var bullet_scene := preload("res://src/Player/bullet.tscn")
@@ -25,6 +26,8 @@ func _process(_delta: float) -> void:
 		%DashingTimer.start()
 
 func _physics_process(delta: float) -> void:
+	if dead: return
+	
 	look_at(get_global_mouse_position())
 	
 	var dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -67,7 +70,10 @@ func _damage() -> void:
 	
 	current_hp -= 10.0
 	if current_hp <= 0.0:
-		queue_free()
+		hide()
+		dead = true
+		collision_layer = 0
+		collision_mask = 0
 
 func _on_shoot_timer_timeout() -> void:
 	can_shoot = true
