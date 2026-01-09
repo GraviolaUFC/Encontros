@@ -19,6 +19,18 @@ func _ready() -> void:
 	Global.player = self
 
 func _process(_delta: float) -> void:
+	print(get_viewport().get_mouse_position())
+	
+	var gun_direction := (get_global_mouse_position() - global_position).normalized()
+	$Gun.position = gun_direction * 40
+	$Gun.look_at(get_global_mouse_position())
+	
+	var mouse_pos := get_local_mouse_position()
+	if mouse_pos.x <= 0:
+		$AnimatedSprite2D.flip_h = true
+	else:
+		$AnimatedSprite2D.flip_h = false
+	
 	if Input.is_action_just_pressed("dash") and can_dash:
 		can_dash = false
 		dashing = true
@@ -28,8 +40,6 @@ func _process(_delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if dead: return
 	
-	look_at(get_global_mouse_position())
-	
 	var dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	if not dashing and dir != Vector2(0,0):
 		dash_direction = dir
@@ -38,6 +48,11 @@ func _physics_process(delta: float) -> void:
 	if dashing:
 		velocity += dash_direction * dash_speed
 	
+	if velocity == Vector2(0,0):
+		$AnimatedSprite2D.play("idle")
+	else:
+		$AnimatedSprite2D.play("walk")
+	
 	if Input.is_action_pressed("shoot") and can_shoot:
 		for i in range(-1, 2):
 			var bullet: RigidBody2D = bullet_scene.instantiate()
@@ -45,7 +60,7 @@ func _physics_process(delta: float) -> void:
 			
 			bullet.position = %Gun.global_position
 			var trinta = deg_to_rad(30)
-			var look_dir := Vector2.from_angle(rotation + trinta * i)
+			var look_dir := Vector2.from_angle(%Gun.rotation + trinta * i)
 			bullet.apply_impulse(look_dir * 500)
 			
 			can_shoot = false
@@ -62,8 +77,8 @@ func _damage() -> void:
 	if invunerable:
 		return
 	
-	$Sprite2D.modulate = Color.WHITE
-	create_tween().tween_property($Sprite2D, "modulate", Color("#0088ff"), 0.5)
+	$AnimatedSprite2D.modulate = Color.WHITE
+	create_tween().tween_property($AnimatedSprite2D, "modulate", Color("#0088ff"), 0.5)
 	
 	invunerable = true
 	%InvTimer.start()
