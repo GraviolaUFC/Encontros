@@ -1,0 +1,114 @@
+[gd_scene load_steps=8 format=3 uid="uid://bmvmtpxq0y77f"]
+
+[ext_resource type="Script" uid="uid://b7vduafjxexpa" path="res://src/main.gd" id="1_gh0ne"]
+[ext_resource type="PackedScene" uid="uid://3yatj6ifxvxm" path="res://src/Player/player.tscn" id="2_5q4o7"]
+[ext_resource type="Texture2D" uid="uid://ccjlygequ1rmc" path="res://assets/square.png" id="2_fyndt"]
+[ext_resource type="Texture2D" uid="uid://b27m2nuy8b8op" path="res://assets/game_icons/pause.png" id="3_5q4o7"]
+
+[sub_resource type="Gradient" id="Gradient_kmhfv"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
+metadata/_snap_enabled = true
+metadata/_snap_count = 2
+
+[sub_resource type="Gradient" id="Gradient_fyndt"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
+metadata/_snap_enabled = true
+metadata/_snap_count = 2
+
+[sub_resource type="Curve2D" id="Curve2D_ubfh8"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -128, -128, 0, 0, 0, 0, 1280, -128, 0, 0, 0, 0, 1280, 768, 0, 0, 0, 0, -128, 768, 0, 0, 0, 0, -128, -128)
+}
+point_count = 5
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_gh0ne")
+
+[node name="BGCanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="BGCanvasLayer"]
+position = Vector2(576, 324)
+amount = 100
+texture = ExtResource("2_fyndt")
+lifetime = 20.0
+emission_shape = 3
+emission_rect_extents = Vector2(576, 324)
+direction = Vector2(0, 1)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 8.0
+initial_velocity_max = 30.0
+angular_velocity_min = -10.0
+angular_velocity_max = 10.0
+scale_amount_min = 0.01
+scale_amount_max = 0.03
+color_ramp = SubResource("Gradient_kmhfv")
+color_initial_ramp = SubResource("Gradient_fyndt")
+
+[node name="Arena" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Player" parent="Arena" instance=ExtResource("2_5q4o7")]
+unique_name_in_owner = true
+position = Vector2(576, 324)
+
+[node name="SpawnLine" type="Path2D" parent="Arena"]
+curve = SubResource("Curve2D_ubfh8")
+
+[node name="SpawnSampler" type="PathFollow2D" parent="Arena/SpawnLine"]
+unique_name_in_owner = true
+position = Vector2(-128, -128)
+
+[node name="SpawnTimer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
+[node name="UICanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ScreenMargin" type="MarginContainer" parent="UICanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Control" type="Control" parent="UICanvasLayer/ScreenMargin"]
+layout_mode = 2
+
+[node name="PauseButton" type="Button" parent="UICanvasLayer/ScreenMargin/Control"]
+process_mode = 3
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 1
+offset_right = 32.0
+offset_bottom = 32.0
+focus_mode = 0
+toggle_mode = true
+icon = ExtResource("3_5q4o7")
+icon_alignment = 1
+expand_icon = true
+
+[node name="PauseLabel" type="Label" parent="UICanvasLayer/ScreenMargin/Control"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 72
+text = "JOGO
+PAUSADO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
+[connection signal="toggled" from="UICanvasLayer/ScreenMargin/Control/PauseButton" to="." method="_on_pause_button_toggled"]
