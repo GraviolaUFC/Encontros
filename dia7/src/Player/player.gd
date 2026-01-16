@@ -15,6 +15,7 @@ var invunerable := false
 
 var dashing := false
 var can_dash := true
+var powerup_timer := 0.0
 var dash_direction := Vector2(1 ,0)
 
 
@@ -22,7 +23,7 @@ func _ready() -> void:
 	Global.player = self
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	# Atualiza a posição da arma ao redor do player
 	var gun_direction := (get_global_mouse_position() - global_position).normalized()
 	$Gun.position = gun_direction * 40 # 40px na direção do mouse
@@ -48,6 +49,9 @@ func _process(_delta: float) -> void:
 		# Inicia o delay do dash
 		can_dash = false
 		%CanDashTimer.start()
+	
+	powerup_timer -= delta
+	powerup_timer = max(0, powerup_timer)
 
 
 func _physics_process(delta: float) -> void:
@@ -72,19 +76,26 @@ func _physics_process(delta: float) -> void:
 	
 	# Lógica de tiro
 	if Input.is_action_pressed("shoot") and can_shoot:
-		# Cria uma nova bala
-		var bullet: RigidBody2D = bullet_scene.instantiate()
-		get_parent().add_child(bullet)
-		
-		# Atualiza a posição inicial da bala pra ser a mesma da arma
-		bullet.global_position = %Gun.global_position
-		# Atira a bala na direção em que a arma está apontada
-		var bullet_dir := Vector2.from_angle(%Gun.rotation)
-		bullet.apply_impulse(bullet_dir * 500)
-		
-		# Inicia o cooldown de tiro
-		can_shoot = false
-		%ShootTimer.start()
+		var bullet_count = 1
+		if powerup_timer > 0.0:
+			bullet_count = 3
+		for i in range(bullet_count):
+			# Cria uma nova bala
+			var bullet: RigidBody2D = bullet_scene.instantiate()
+			get_parent().add_child(bullet)
+			
+			# Atualiza a posição inicial da bala pra ser a mesma da arma
+			bullet.global_position = %Gun.global_position
+			# Atira a bala na direção em que a arma está apontada
+			var angle = (i - 1) * PI / 6
+			if bullet_count == 1:
+				angle = 0.0
+			var bullet_dir := Vector2.from_angle(%Gun.rotation + angle)
+			bullet.apply_impulse(bullet_dir * 500)
+			
+			# Inicia o cooldown de tiro
+			can_shoot = false
+			%ShootTimer.start()
 	
 	# Movimenta o jogador e lida com possível colisãos
 	var collision := move_and_collide(velocity * delta)
@@ -93,6 +104,9 @@ func _physics_process(delta: float) -> void:
 		# Se o corpo colidido é um inimigo, toma dano
 		if body is Enemy:
 			_damage()
+		elif body is PowerUp:
+			powerup_timer = 10.0
+			body.queue_free()
 
 
 func _damage() -> void:

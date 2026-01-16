@@ -1,6 +1,7 @@
 class_name Bullet
 extends RigidBody2D
 
+
 func _process(_delta: float) -> void:
 	var enemies = %EnemyDetector.get_overlapping_bodies()
 	

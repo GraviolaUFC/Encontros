@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://bmvmtpxq0y77f"]
+[gd_scene load_steps=9 format=3 uid="uid://bmvmtpxq0y77f"]
 
 [ext_resource type="Script" uid="uid://b7vduafjxexpa" path="res://src/main.gd" id="1_gh0ne"]
 [ext_resource type="PackedScene" uid="uid://3yatj6ifxvxm" path="res://src/Player/player.tscn" id="2_5q4o7"]
 [ext_resource type="Texture2D" uid="uid://ccjlygequ1rmc" path="res://assets/square.png" id="2_fyndt"]
 [ext_resource type="Texture2D" uid="uid://b27m2nuy8b8op" path="res://assets/game_icons/pause.png" id="3_5q4o7"]
+[ext_resource type="FontFile" uid="uid://cx30v4yeils1s" path="res://assets/Jersey25-Regular.ttf" id="4_fyndt"]
 
 [sub_resource type="Gradient" id="Gradient_kmhfv"]
 interpolation_mode = 2
@@ -83,17 +84,36 @@ theme_override_constants/margin_bottom = 10
 [node name="Control" type="Control" parent="UICanvasLayer/ScreenMargin"]
 layout_mode = 2
 
-[node name="PauseButton" type="Button" parent="UICanvasLayer/ScreenMargin/Control"]
-process_mode = 3
+[node name="VBoxContainer" type="VBoxContainer" parent="UICanvasLayer/ScreenMargin/Control"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PauseButton" type="Button" parent="UICanvasLayer/ScreenMargin/Control/VBoxContainer"]
 custom_minimum_size = Vector2(32, 32)
-layout_mode = 1
-offset_right = 32.0
-offset_bottom = 32.0
+layout_mode = 2
 focus_mode = 0
 toggle_mode = true
 icon = ExtResource("3_5q4o7")
 icon_alignment = 1
 expand_icon = true
+
+[node name="LifeBar" type="ProgressBar" parent="UICanvasLayer/ScreenMargin/Control/VBoxContainer"]
+unique_name_in_owner = true
+modulate = Color(0, 1, 0, 1)
+custom_minimum_size = Vector2(128, 32)
+layout_mode = 2
+max_value = 1.0
+value = 1.0
+show_percentage = false
+
+[node name="PowerupBar" type="ProgressBar" parent="UICanvasLayer/ScreenMargin/Control/VBoxContainer"]
+unique_name_in_owner = true
+modulate = Color(1, 0, 0, 1)
+custom_minimum_size = Vector2(128, 32)
+layout_mode = 2
+max_value = 1.0
+show_percentage = false
 
 [node name="PauseLabel" type="Label" parent="UICanvasLayer/ScreenMargin/Control"]
 unique_name_in_owner = true
@@ -110,5 +130,25 @@ PAUSADO"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="DeathCounter" type="Label" parent="UICanvasLayer/ScreenMargin/Control"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("4_fyndt")
+theme_override_font_sizes/font_size = 64
+text = "0"
+horizontal_alignment = 1
+
+[node name="PowerupTimer" type="Timer" parent="."]
+wait_time = 10.0
+autostart = true
+
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
-[connection signal="toggled" from="UICanvasLayer/ScreenMargin/Control/PauseButton" to="." method="_on_pause_button_toggled"]
+[connection signal="toggled" from="UICanvasLayer/ScreenMargin/Control/VBoxContainer/PauseButton" to="." method="_on_pause_button_toggled"]
+[connection signal="timeout" from="PowerupTimer" to="." method="_on_powerup_timer_timeout"]

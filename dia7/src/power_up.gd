@@ -1,0 +1,2 @@
+class_name PowerUp
+extends RigidBody2D

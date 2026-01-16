@@ -1,6 +1,7 @@
 extends Node2D
 
 var enemy_scene := preload("res://src/Enemy/enemy.tscn")
+const POWERUP_SCENE := preload("res://src/power_up.tscn")
 var contador_morte: int = 0
 
 
@@ -10,6 +11,11 @@ func rand_spawn_pos() -> Vector2:
 	# + offset do local do player (faz o spawn seguir a posição do player)
 	# - offset do centro da tela (arrasta o ponto para fora da tela)
 	return %SpawnSampler.position + %Player.position - Vector2(576.0, 324.0)
+
+
+func _process(_delta: float) -> void:
+	%LifeBar.value = %Player.current_hp / %Player.MAX_HP
+	%PowerupBar.value = %Player.powerup_timer / 10.0
 
 
 # Spawna inimigos conforme o timer SpawnTimer
@@ -25,6 +31,7 @@ func _on_spawn_timer_timeout() -> void:
 
 func _enemy_died() -> void:
 	contador_morte += 1
+	%DeathCounter.text = str(contador_morte)
 
 func _on_pause_button_toggled(pause: bool) -> void:
 	# Desativa o processamento do nó de arena
@@ -36,3 +43,10 @@ func _on_pause_button_toggled(pause: bool) -> void:
 	# Altera a visibilidade da tela de "jogo pausado"
 	%PauseLabel.visible = pause
 	
+
+
+func _on_powerup_timer_timeout() -> void:
+	var powerup = POWERUP_SCENE.instantiate()
+	powerup.position = rand_spawn_pos()
+	
+	%Arena.add_child(powerup)
