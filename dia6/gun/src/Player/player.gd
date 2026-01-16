@@ -21,8 +21,6 @@ func _ready() -> void:
 	Global.player = self
 
 func _process(_delta: float) -> void:
-	print(get_viewport().get_mouse_position())
-	
 	var gun_direction := (get_global_mouse_position() - global_position).normalized()
 	$Gun.position = gun_direction * 40
 	$Gun.look_at(get_global_mouse_position())

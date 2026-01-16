@@ -60,5 +60,9 @@ text = "PAUSADO"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+unique_name_in_owner = true
+spawn_path = NodePath("..")
+
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
 [connection signal="toggled" from="CanvasLayer/PauseButton" to="." method="_on_pause_button_toggled"]
