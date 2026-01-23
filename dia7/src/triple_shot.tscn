@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://ccjo358jyg3js"]
+
+[ext_resource type="Script" uid="uid://bnubltafrbjel" path="res://src/triple_shot.gd" id="1_taoeh"]
+[ext_resource type="Texture2D" uid="uid://dxolaxjs1hofv" path="res://assets/fire.png" id="2_mwhgn"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6o1ls"]
+
+[node name="TripleShot" type="RigidBody2D"]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_taoeh")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(2, 2)
+texture = ExtResource("2_mwhgn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_6o1ls")
