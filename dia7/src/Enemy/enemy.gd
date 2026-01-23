@@ -4,6 +4,8 @@ extends RigidBody2D
 signal died
 const SPEED = 200.0
 
+@onready var shader_material = $AnimatedSprite2D.material
+
 const MAX_HP := 30.0
 var current_hp := MAX_HP
 var movement_direction: Vector2 = Vector2.ZERO
@@ -37,8 +39,11 @@ func _on_body_entered(body: Node) -> void:
 
 func _damage() -> void:
 	# Animação de dano
-	$AnimatedSprite2D.modulate = Color("ff9080ff")
-	create_tween().tween_property($AnimatedSprite2D, "modulate", Color.WHITE, 0.5)
+	shader_material.set_shader_parameter("amount", 1.0)
+	create_tween().tween_method(func(a):
+		shader_material.set_shader_parameter("amount", a),
+		1.0, 0.0, 0.25)
+	
 	# Efetiva o dano e checa se HP <= 0
 	current_hp -= 10.0
 	if current_hp <= 0.0:

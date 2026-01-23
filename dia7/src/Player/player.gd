@@ -6,6 +6,8 @@ var current_hp := MAX_HP
 
 var dead := false
 
+@onready var shader_material: ShaderMaterial = $AnimatedSprite2D.material
+
 var move_speed := 300
 var dash_speed := move_speed * 3
 
@@ -114,8 +116,10 @@ func _damage() -> void:
 		return
 	
 	# Animação de dano
-	$AnimatedSprite2D.modulate = Color("ff9080ff")
-	create_tween().tween_property($AnimatedSprite2D, "modulate", Color.WHITE, 0.5)
+	shader_material.set_shader_parameter("amount", 1.0)
+	create_tween().tween_method(func(a):
+		shader_material.set_shader_parameter("amount", a),
+		1.0, 0.0, 0.25)
 	
 	# Deixa o player invulnerável por um tempo
 	invunerable = true

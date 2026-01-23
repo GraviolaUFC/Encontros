@@ -1,8 +1,14 @@
-[gd_scene load_steps=16 format=3 uid="uid://d1q56dyo1bwct"]
+[gd_scene load_steps=18 format=3 uid="uid://d1q56dyo1bwct"]
 
 [ext_resource type="Script" uid="uid://bu0tyq6qhb425" path="res://src/Enemy/enemy.gd" id="1_4gyqm"]
+[ext_resource type="Shader" uid="uid://cxk2htje2eesr" path="res://src/Player/hurt.gdshader" id="2_c5h1j"]
 [ext_resource type="Texture2D" uid="uid://b7h1onyxfw6ab" path="res://assets/robot.png" id="2_r3615"]
 [ext_resource type="Texture2D" uid="uid://c0hdms5ewl5l0" path="res://assets/SproutLands/Free Chicken Sprites.png" id="3_hggtk"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_43s8p"]
+resource_local_to_scene = true
+shader = ExtResource("2_c5h1j")
+shader_parameter/amount = 0.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hggtk"]
 atlas = ExtResource("2_r3615")
@@ -110,6 +116,7 @@ script = ExtResource("1_4gyqm")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
+material = SubResource("ShaderMaterial_43s8p")
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_cqyt8")
 animation = &"walk_chicken"

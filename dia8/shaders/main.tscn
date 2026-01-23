@@ -1,13 +1,60 @@
-[gd_scene format=3 uid="uid://btpbmlfqihcn7"]
+[gd_scene load_steps=10 format=3 uid="uid://btpbmlfqihcn7"]
+
+[ext_resource type="Shader" uid="uid://c54dmpbkxoy8p" path="res://main.gdshader" id="1_0xm2m"]
+[ext_resource type="Texture2D" uid="uid://bqmx0e3fjklgt" path="res://space_invaders.jpg" id="1_1bvp3"]
+[ext_resource type="Texture2D" uid="uid://bpmhgisrq737r" path="res://passaros.jpg" id="2_h2yge"]
+[ext_resource type="Texture2D" uid="uid://ccaui1xdeeeoh" path="res://minecraft.jpg" id="4_lquwl"]
+[ext_resource type="Shader" uid="uid://tcxnqk4w7ngn" path="res://other.gdshader" id="5_lquwl"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ig7tw"]
+shader = ExtResource("1_0xm2m")
+
+[sub_resource type="Gradient" id="Gradient_lquwl"]
+offsets = PackedFloat32Array(0.006849315, 0.53424656, 0.9931507)
+colors = PackedColorArray(1, 0, 0, 1, 0.05490196, 0.05490196, 1, 1, 1, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7mycd"]
+gradient = SubResource("Gradient_lquwl")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
+shader = ExtResource("5_lquwl")
+shader_parameter/gradient = SubResource("GradientTexture1D_7mycd")
+shader_parameter/blur_radius = 11.0
+shader_parameter/intensity = 0.5000000074506
+shader_parameter/threshold = 0.5270000250325
 
 [node name="Main" type="Node2D"]
 
 [node name="MainCanvas" type="CanvasLayer" parent="."]
 
+[node name="Minecraft" type="Sprite2D" parent="MainCanvas"]
+visible = false
+position = Vector2(729, 482.00006)
+scale = Vector2(0.415, 0.2915129)
+texture = ExtResource("4_lquwl")
+
+[node name="SpaceInvaders" type="Sprite2D" parent="MainCanvas"]
+visible = false
+position = Vector2(603, 333)
+scale = Vector2(2.0375, 1.4708333)
+texture = ExtResource("1_1bvp3")
+
 [node name="Main" type="TextureRect" parent="MainCanvas"]
+material = SubResource("ShaderMaterial_ig7tw")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("2_h2yge")
 stretch_mode = 5
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_7mycd")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
