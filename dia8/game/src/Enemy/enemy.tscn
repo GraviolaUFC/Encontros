@@ -1,0 +1,138 @@
+[gd_scene load_steps=18 format=3 uid="uid://d1q56dyo1bwct"]
+
+[ext_resource type="Script" uid="uid://bu0tyq6qhb425" path="res://src/Enemy/enemy.gd" id="1_4gyqm"]
+[ext_resource type="Texture2D" uid="uid://b7h1onyxfw6ab" path="res://assets/robot.png" id="2_r3615"]
+[ext_resource type="Texture2D" uid="uid://c0hdms5ewl5l0" path="res://assets/SproutLands/Free Chicken Sprites.png" id="3_hggtk"]
+
+[sub_resource type="Shader" id="Shader_hggtk"]
+code = "shader_type canvas_item;
+
+uniform float amount : hint_range(0.0, 1.0);
+
+void fragment() {
+	vec4 px_color = texture(TEXTURE, UV);
+	COLOR.rgb = mix(px_color.rgb, vec3(1.0, 1.0, 1.0), amount);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c5h1j"]
+resource_local_to_scene = true
+shader = SubResource("Shader_hggtk")
+shader_parameter/amount = 0.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hggtk"]
+atlas = ExtResource("2_r3615")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c5h1j"]
+atlas = ExtResource("2_r3615")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cqyt8"]
+atlas = ExtResource("3_hggtk")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ikaqe"]
+atlas = ExtResource("3_hggtk")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_43s8p"]
+atlas = ExtResource("2_r3615")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d6mfm"]
+atlas = ExtResource("2_r3615")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_htf21"]
+atlas = ExtResource("3_hggtk")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r0al8"]
+atlas = ExtResource("3_hggtk")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rjtmr"]
+atlas = ExtResource("3_hggtk")
+region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_waafd"]
+atlas = ExtResource("3_hggtk")
+region = Rect2(48, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cqyt8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hggtk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c5h1j")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cqyt8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ikaqe")
+}],
+"loop": true,
+"name": &"idle_chicken",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_43s8p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d6mfm")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_htf21")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r0al8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rjtmr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_waafd")
+}],
+"loop": true,
+"name": &"walk_chicken",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r3615"]
+size = Vector2(34, 31)
+
+[node name="Enemy" type="RigidBody2D"]
+collision_layer = 4
+collision_mask = 3
+lock_rotation = true
+contact_monitor = true
+max_contacts_reported = 10
+script = ExtResource("1_4gyqm")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+material = SubResource("ShaderMaterial_c5h1j")
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_cqyt8")
+animation = &"walk_chicken"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-5, 1)
+shape = SubResource("RectangleShape2D_r3615")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
